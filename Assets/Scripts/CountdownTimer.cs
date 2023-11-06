@@ -16,7 +16,7 @@ public class CountdownTimer : MonoBehaviour
         }
         else if(remainingTime < 0)
         {
-            remainingTime = 300;
+            remainingTime = 900;
         }
         int minutes = Mathf.FloorToInt(remainingTime / 60);
         int seconds = Mathf.FloorToInt(remainingTime % 60);
