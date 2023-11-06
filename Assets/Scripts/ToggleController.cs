@@ -14,7 +14,6 @@ public class ToggleController : MonoBehaviour
     public Text dolarMyBalance;
     public Text euroMyBalance;
     public Text goldMyBalance;
-    int dolarBalanceInt, euroBalanceInt, goldBalanceInt;
 
     public GameObject takingPanel;
     public GameObject sellingPanel;
@@ -27,6 +26,8 @@ public class ToggleController : MonoBehaviour
         choiceDolar.isOn = false;
         choiceEuro.isOn = false;
         choiceGold.isOn = false;
+
+        currencyValue.text = " ";
     }
 
     public void DolarCheck()
@@ -68,18 +69,19 @@ public class ToggleController : MonoBehaviour
 
     public void DolarValue()
     {
-        int inputValue = int.Parse(currencyValue.text);
-        int currentBalance = int.Parse(dolarMyBalance.text);
-        int newBalance = currentBalance + inputValue;
-        dolarMyBalance.text = newBalance.ToString() + "$";
+        //dolarMyBalance.text = (dolarMyBalance.text + currencyValue.text) + "$";
+        decimal inputValue = decimal.Parse(currencyValue.text);
+        decimal currentBalance = decimal.Parse(dolarMyBalance.text);
+        decimal newBalance = currentBalance + inputValue;
+        dolarMyBalance.text = newBalance.ToString();
     }
 
     public void EuroValue()
     {
-        int inputValue = int.Parse(currencyValue.text);
-        int currentBalance = int.Parse(euroMyBalance.text);
-        int newBalance = currentBalance + inputValue;
-        euroMyBalance.text = newBalance.ToString() + "€";
+        decimal inputValue = decimal.Parse(currencyValue.text);
+        decimal currentBalance = decimal.Parse(euroMyBalance.text);
+        decimal newBalance = currentBalance + inputValue;
+        euroMyBalance.text = newBalance.ToString(); // + "€"
     }
 
     public void GoldValue()
@@ -87,6 +89,6 @@ public class ToggleController : MonoBehaviour
         int inputValue = int.Parse(currencyValue.text);
         int currentBalance = int.Parse(goldMyBalance.text);
         int newBalance = currentBalance + inputValue;
-        goldMyBalance.text = newBalance.ToString() + "/adet";
+        goldMyBalance.text = newBalance.ToString();
     }
 }
