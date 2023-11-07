@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Http;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine.Networking;
 using UnityEngine;
 using System.Net;
@@ -38,6 +34,19 @@ public class DataManagement : MonoBehaviour
     public Text myEuroBalanceText;
     public Text myGoldBalanceText;
 
+    //Date Time
+    public Text dateTimeText;
+
+    //Convert Currency
+    public Text dolarValueText;
+    public Text tlValueText;
+    public Text genusText;
+
+    //Data Save From Json
+    public CurrencyData _CurrencyData;
+
+    
+
     private void Update()
     {
         dolarTakeText.text = dolarTakeRate + "TL";
@@ -48,6 +57,31 @@ public class DataManagement : MonoBehaviour
 
         goldTakeText.text = goldTakeRate + "TL";
         goldSellText.text = goldSellRate + "TL";
+    }
+
+    //Save&Trade
+    [ContextMenu("Save")]
+    public void SaveButtonTrade()
+    {
+        //DataTime
+        string time = System.DateTime.UtcNow.ToLocalTime().ToString("HH:mm dd.MM.yy");
+        dateTimeText.text = time;
+
+        //TradeCalculation
+        genusText.text = "DOLAR";
+        dolarValueText.text = myDolarBalanceText.text;
+        decimal convertCurrencyValue = decimal.Parse(dolarTakeRate);
+        decimal dolarCurrencyValue = decimal.Parse(dolarValueText.text);
+        decimal newOutput = convertCurrencyValue * dolarCurrencyValue;
+        tlValueText.text = newOutput.ToString();
+
+        //DolarSave
+        string jsonSave = JsonUtility.ToJson(_CurrencyData, true);
+        File.WriteAllText(Application.persistentDataPath + "/CurrencyData.json", jsonSave);
+
+        //LOAD
+        //string JsonSave = File.ReadAllText(Application.persistentDataPath + "/CurrencyData.json");
+        //_CurrencyData = JsonUtility.FromJson<CurrencyData>(JsonSave);
     }
 
     public void GetDataValue()
@@ -101,6 +135,7 @@ public class DataManagement : MonoBehaviour
         sGsRate = sGsRate.Substring(35, sGsRate.IndexOf(sGsRateEnd));
         goldSellRate = sGsRate;
 
+        
 
         reader.Close();
         response.Close();
@@ -123,81 +158,5 @@ public class DataManagement : MonoBehaviour
         takingPanel.SetActive(false);
         sellingPanel.SetActive(false);
     }
-
-    //[Serializable]
-    //public class CurrencyData
-    //{
-    //    public string Update_Date;
-    //    public Currency USD;
-    //    public Currency EUR;
-    //}
-
-    //[Serializable]
-    //public class Currency
-    //{
-    //    public string Buying;
-    //    public string Type;
-    //    public string Selling;
-    //    public string Change;
-    //}
-
-    //public class JSONExample : MonoBehaviour
-    //{
-    //    private string jsonText = "{\"Update_Date\":\"2023-11-05 23:00:02\",\"USD\":{\"Buying\":\"28,3770\",\"Type\":\"Currency\",\"Selling\":\"28,3832\",\"Change\":\"%0,20\"},\"EUR\":{\"Buying\":\"30,4286\",\"Type\":\"Currency\",\"Selling\":\"30,5348\",\"Change\":\"%1,05\"}}";
-
-    //    void Start()
-    //    {
-    //        CurrencyData currencyData = JsonUtility.FromJson<CurrencyData>(jsonText);
-
-    //        Debug.Log("Update Date: " + currencyData.Update_Date);
-    //        Debug.Log("USD Buying: " + currencyData.USD.Buying);
-    //        Debug.Log("EUR Selling: " + currencyData.EUR.Selling);
-    //    }
-    //}
-
-    //private string url = "https://finans.truncgil.com/v3/today.json";
-
-    //void Start()
-    //{
-    //    StartCoroutine(DownloadData());
-    //}
-
-    //IEnumerator DownloadData()
-    //{
-    //    UnityWebRequest www = UnityWebRequest.Get(url);
-    //    yield return www.SendWebRequest();
-
-    //    if (www.isNetworkError || www.isHttpError)
-    //    {
-    //        Debug.Log("Error: " + www.error);
-    //    }
-    //    else
-    //    {
-    //        string responseFromServer = www.downloadHandler.text;
-    //        string sRateBegin = "\"Buying\":";
-    //        string sRateEnd = "\",\"";
-    //        int startIndex = responseFromServer.IndexOf(sRateBegin);
-
-    //        if (startIndex >= 0)
-    //        {
-    //            startIndex += sRateBegin.Length;
-    //            int endIndex = responseFromServer.IndexOf(sRateEnd, startIndex);
-
-    //            if (endIndex >= 0)
-    //            {
-    //                string sRate = responseFromServer.Substring(startIndex, endIndex - startIndex);
-    //                Debug.Log("sRate: " + sRate);
-    //            }
-    //            else
-    //            {
-    //                Debug.Log("sRateEnd not found");
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("sRateBegin not found");
-    //        }
-    //    }
-    //}
 }
 
