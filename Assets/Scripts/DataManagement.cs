@@ -45,7 +45,11 @@ public class DataManagement : MonoBehaviour
     //Data Save From Json
     public CurrencyData _CurrencyData;
 
-    
+    //Content Prefabs
+    public GameObject dolarSavePrefabs;
+    public GameObject euroSavePrefabs;
+    public GameObject goldSavePrefabs;
+    public Transform saveDolarPrefabsTransform;
 
     private void Update()
     {
@@ -75,6 +79,8 @@ public class DataManagement : MonoBehaviour
         decimal newOutput = convertCurrencyValue * dolarCurrencyValue;
         tlValueText.text = newOutput.ToString();
 
+        SpawnPrefabs();
+
         //DolarSave
         string jsonSave = JsonUtility.ToJson(_CurrencyData, true);
         File.WriteAllText(Application.persistentDataPath + "/CurrencyData.json", jsonSave);
@@ -82,6 +88,11 @@ public class DataManagement : MonoBehaviour
         //LOAD
         //string JsonSave = File.ReadAllText(Application.persistentDataPath + "/CurrencyData.json");
         //_CurrencyData = JsonUtility.FromJson<CurrencyData>(JsonSave);
+    }
+
+    public void SpawnPrefabs()
+    {
+        Instantiate(dolarSavePrefabs, saveDolarPrefabsTransform.position, dolarSavePrefabs.transform.rotation);
     }
 
     public void GetDataValue()
